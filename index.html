@@ -19,7 +19,7 @@
                 // to explicitly view the full site. This is validated
                 // by checking if a "noredirect" cookie exists
                 if ( document.cookie.indexOf(NO_REDIRECT) === -1 ) {
-                    document.location = MOBILE_SITE;
+                    document.location += MOBILE_SITE;
                 }
             }
         })();

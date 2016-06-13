@@ -7,6 +7,7 @@
         <!-- 引入 WeUI -->
         <link rel="stylesheet" href="weui.min.css"/>
         <script src="../jquery-3.0.0.min.js"></script>
+        <script src="../clipboard.min.js"></script>
         <style>
         body{
             background-color: #efeff4;
@@ -21,10 +22,10 @@
         <script>
             $(document).ready(function(){
                 $('#showPassword').click(function() {
-                    $('#password').show();
+                    $('#password_dialog').show();
                     $('#showToast').click(function(){
                         $('#toast').show();
-                        $('#password').hide();
+                        $('#password_dialog').hide();
                         setTimeout(function () {
                             $('#toast').hide();
                         }, 2000);
@@ -64,17 +65,25 @@
             <div class="weui_btn_area">
                 <div class="weui_btn weui_btn_primary" id="showPassword">Generate</div>
             </div>
-            <div class="weui_dialog_confirm" id="password" style="display: none;">
+            <div class="weui_dialog_confirm" id="password_dialog" style="display: none;">
                 <div class="weui_mask"></div>
                 <div class="weui_dialog">
                     <div class="weui_dialog_hd">
                         <strong class="weui_dialog_title">Password</strong>
                     </div>
-                    <div class="weui_dialog_bd">
+                    <div class="weui_dialog_bd" id="password">
                         3213123
                     </div>
                     <div class="weui_dialog_ft">
-                        <a id="showToast" class="weui_btn_dialog primary">Copy</a>
+                        <a id="showToast" class="weui_btn_dialog primary" data-clipboard-target="#password">Copy</a>
+                        <script>
+                            var copyAction = document.getElementById('showToast');
+                            var clipboard = new Clipboard(copyAction);
+
+                            clipboard.on('success', function(e) {
+                                console.log(e);
+                            });
+                        </script>
                     </div>
                 </div>
             </div>
@@ -82,7 +91,7 @@
                 <div class="weui_mask_transparent"></div>
                 <div class="weui_toast">
                     <i class="weui_icon_toast"></i>
-                    <p class="weui_toast_content">Copyed!</p>
+                    <p class="weui_toast_content">Copied!</p>
                 </div>
             </div>
         </div>

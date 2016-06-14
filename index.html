@@ -30,6 +30,24 @@
     <link rel="stylesheet" href="octicons/octicons.css">
     <link rel="stylesheet" href="css/password.css">
     <link rel="shortcut icon" href="favicon.ico"/>
+    <script src="js/jquery-3.0.0.min.js"></script>
+    <script src="js/clipboard.min.js"></script>
+    <script src="js/sha.js"></script>
+    <script>
+            $(document).ready(function(){
+                $('#showPassword').click(function() {
+                    var info = new Object();
+                    info.id = $('#ID').val().trim();
+                    info.app = $('#APP').val().toLowerCase().trim();
+                    var infoText = JSON.stringify(info);
+                    var key = $('#KEY').val();
+                    var hmacObj = new jsSHA('SHA-1', 'TEXT');
+                    hmacObj.setHMACKey(key, 'TEXT');
+                    hmacObj.update(infoText);
+                    $('#password').val(hmacObj.getHMAC('B64').substring(0, 8));
+                });
+            });
+        </script>
 </head>
 
 <body>
@@ -47,29 +65,37 @@
             </div>
             <div class="password-form-body">
                 <dl class="form-group">
-                    <label for="name">Username</label>
-                    <input class="form-control input-block" type="email" placeholder="username/email">
+                    <label>Username</label>
+                    <input id="ID" class="form-control input-block" type="email" placeholder="username/email">
                 </dl>
                 <dl class="form-group">
-                    <label for="website">Website</label>
-                    <input class="form-control input-block" type="text" placeholder="website/app">
+                    <label>Website</label>
+                    <input id="APP" class="form-control input-block" type="text" placeholder="website/app">
                 </dl>
                 <dl class="form-group">
-                    <label for="password">1Password</label>
-                    <input class="form-control input-block" type="password" placeholder="1password">
+                    <label>1Password</label>
+                    <input id="KEY" class="form-control input-block" type="password" placeholder="1password">
                 </dl>
                 <dl class="form-group">
                     <div class="form-actions">
-                        <button type="button" class="btn btn-primary btn-block">Generate</button>
+                        <button id="showPassword" type="button" class="btn btn-primary btn-block">Generate</button>
                     </div>
                 </dl>
                 <div class="input-group">
-                    <input class="form-control" type="text" placeholder="password">
+                    <input id="password" class="form-control" type="text" placeholder="password" readonly>
                     <span class="input-group-button">
-                    <button class="btn">
-                        <span class="octicon octicon-clippy"></span>
-                    </button>
+                        <button id="copy" class="btn" data-clipboard-target="#password">
+                            <span class="octicon octicon-clippy"></span>
+                        </button>
                     </span>
+                    <script>
+                        var copyAction = document.getElementById('copy');
+                        var clipboard = new Clipboard(copyAction);
+
+                        clipboard.on('success', function(e) {
+                            console.log(e);
+                        });
+                    </script>
                 </div>
             </div>
         </form>

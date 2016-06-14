@@ -8,7 +8,8 @@
         <link rel="stylesheet" href="weui.min.css"/>
         <link rel="shortcut icon" href="../favicon.ico"/>
         <script src="../js/jquery-3.0.0.min.js"></script>
-        <script src="../css/clipboard.min.js"></script>
+        <script src="../js/clipboard.min.js"></script>
+        <script src="../js/sha.js"></script>
         <link rel="apple-touch-icon" sizes="57x57" href="../icons/favicon-57x57.png">
         <link rel="apple-touch-icon" sizes="60x60" href="../icons/favicon-60x60.png">
         <link rel="apple-touch-icon" sizes="72x72" href="../icons/favicon-72x72.png">
@@ -32,6 +33,15 @@
         <script>
             $(document).ready(function(){
                 $('#showPassword').click(function() {
+                    var info = new Object();
+                    info.id = $('#ID').val().trim();
+                    info.app = $('#APP').val().toLowerCase().trim();
+                    var infoText = JSON.stringify(info);
+                    var key = $('#KEY').val();
+                    var hmacObj = new jsSHA('SHA-1', 'TEXT');
+                    hmacObj.setHMACKey(key, 'TEXT');
+                    hmacObj.update(infoText);
+                    $('#password').text(hmacObj.getHMAC('B64').substring(0, 8));
                     $('#password_dialog').show();
                     $('#showToast').click(function(){
                         $('#toast').show();
@@ -44,7 +54,7 @@
             });
         </script>
     </head>
-    <body>
+    <body">
         <!-- 使用 -->
         <div class="weui_cells_title">Password Generator</div>
         <div class="weui_cells weui_cells_form">
@@ -53,7 +63,7 @@
                     <label class="weui_label">ID</label>
                 </div>
                 <div class="weui_cell_bd weui_cell_primary">
-                    <input class="weui_input" type="email" placeholder="Username/Email">
+                    <input id="ID" class="weui_input" type="email" placeholder="Username/Email">
                 </div>
             </div>
             <div class="weui_cell">
@@ -61,7 +71,7 @@
                     <label class="weui_label">APP</label>
                 </div>
                 <div class="weui_cell_bd weui_cell_primary">
-                    <input class="weui_input" type="text" placeholder="website/app">
+                    <input id="APP" class="weui_input" type="text" placeholder="website/app">
                 </div>
             </div>
             <div class="weui_cell">
@@ -69,11 +79,11 @@
                     <label class="weui_label">KEY</label>
                 </div>
                 <div class="weui_cell_bd weui_cell_primary">
-                    <input class="weui_input" type="password" placeholder="1password">
+                    <input id="KEY" class="weui_input" type="password" placeholder="1password">
                 </div>
             </div>
             <div class="weui_btn_area">
-                <div class="weui_btn weui_btn_primary" id="showPassword">Generate</div>
+                <div class="weui_btn weui_btn_primary" id="showPassword"">Generate</div>
             </div>
             <div class="weui_dialog_confirm" id="password_dialog" style="display: none;">
                 <div class="weui_mask"></div>
@@ -82,7 +92,7 @@
                         <strong class="weui_dialog_title">Password</strong>
                     </div>
                     <div class="weui_dialog_bd" id="password">
-                        3213123
+                        1111111
                     </div>
                     <div class="weui_dialog_ft">
                         <a id="showToast" class="weui_btn_dialog primary" data-clipboard-target="#password">Copy</a>

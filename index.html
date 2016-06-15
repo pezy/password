@@ -33,27 +33,34 @@
     <script src="js/jquery-3.0.0.min.js"></script>
     <script src="js/clipboard.min.js"></script>
     <script src="js/sha.js"></script>
+    <script src="js/jquery.qrcode.min.js"></script>
     <script>
-            $(document).ready(function(){
-                $('#showPassword').click(function() {
-                    var info = new Object();
-                    info.id = $('#ID').val().trim();
-                    info.app = $('#APP').val().toLowerCase().trim();
-                    var infoText = JSON.stringify(info);
-                    var key = $('#KEY').val();
-                    var hmacObj = new jsSHA('SHA-1', 'TEXT');
-                    hmacObj.setHMACKey(key, 'TEXT');
-                    hmacObj.update(infoText);
-                    $('#password').val(hmacObj.getHMAC('B64').substring(0, 8)).css("font-weight","Bold");
-                });
-
-                $("#KEY").keydown(function(event){
-                    if(event.keyCode==32||event.keyCode==13||event.keyCode==188||event.keyCode==186){
-                        $("#showPassword").click();
-                    }
+        $(document).ready(function(){
+            $('#showPassword').click(function() {
+                var info = new Object();
+                info.id = $('#ID').val().trim();
+                info.app = $('#APP').val().toLowerCase().trim();
+                var infoText = JSON.stringify(info);
+                var key = $('#KEY').val();
+                var hmacObj = new jsSHA('SHA-1', 'TEXT');
+                hmacObj.setHMACKey(key, 'TEXT');
+                hmacObj.update(infoText);
+                var password = hmacObj.getHMAC('B64').substring(0, 8);
+                $('#password').val(password).css("font-weight","Bold");
+                $('#qrcode').qrcode({
+                    text: password,
+                    width: 120,
+                    height: 120
                 });
             });
-        </script>
+
+            $("#KEY").keydown(function(event){
+                if(event.keyCode==32||event.keyCode==13||event.keyCode==188||event.keyCode==186){
+                    $("#showPassword").click();
+                }
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -102,6 +109,9 @@
                     });
                 </script>
             </div>
+            <dl class="form-group">
+                <div id="qrcode"></div>
+            </dl>
         </div>
     </div>
 </body>

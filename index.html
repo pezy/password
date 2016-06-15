@@ -44,7 +44,7 @@
                     var hmacObj = new jsSHA('SHA-1', 'TEXT');
                     hmacObj.setHMACKey(key, 'TEXT');
                     hmacObj.update(infoText);
-                    $('#password').val(hmacObj.getHMAC('B64').substring(0, 8));
+                    $('#password').val(hmacObj.getHMAC('B64').substring(0, 8)).css("font-weight","Bold");
                 });
 
                 $("#KEY").keydown(function(event){

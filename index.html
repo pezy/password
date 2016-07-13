@@ -47,6 +47,7 @@
                 hmacObj.update(infoText);
                 var password = hmacObj.getHMAC('B64').substring(0, 8);
                 $('#password').val(password).css("font-weight","Bold");
+                $('#qrcode').empty();
                 $('#qrcode').qrcode({
                     text: password,
                     width: 120,
